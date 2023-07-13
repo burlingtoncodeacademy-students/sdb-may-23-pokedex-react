@@ -10,7 +10,6 @@ function App() {
   return (
     <>
     <Input setName={setName} />
-    {console.log(name)}
     <Pokedex name={name} />
     </>
   )
