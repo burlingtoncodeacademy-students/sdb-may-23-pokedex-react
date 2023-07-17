@@ -5,12 +5,11 @@ import './App.css'
 
 function App() {
 
-  const [ name, setName ] = useState("")
-
+  const [ poke, setPoke ] = useState("")
   return (
     <>
-    <Input setName={setName} />
-    <Pokedex name={name} />
+    <Input setPoke={setPoke} />
+    <Pokedex poke={poke} />
     </>
   )
 }

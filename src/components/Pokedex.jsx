@@ -2,42 +2,52 @@ import React, { useEffect, useState } from 'react'
 import Loading from './Loading'
 import DisplayPokemon from './DisplayPokemon'
 
-function Pokedex({ name }) {
-
+function Pokedex({ poke }) {
+    
     // Stores data from the fetch
-    const [ data, setData ] = useState([])
-    // Flag handling the race condition of fetch
-    // const [ loading, setLoading ] = useState(false)
+    const [ data, setData ] = useState(null)
+    const [ error, setError ] = useState(null)
+// https://pokeapi.co/api/v2/pokemon/ditto
 
     useEffect(() => {
-        // Prevents fetch triggering before it has pokemon value
-        if (name !== "") {
-            // Flag that stops execution of a console.log or other data append
-            // setLoading(true)
-            fetch(`https://pokeapi.co/api/v2/pokemon/${name}`)
-                .then(res => res.json())
-                .then(data => {
-                    setData(data)
-                    // allows execution of other code to occur
-                    // setLoading(false)
-                    // loading ? null : console.log(data)
-                })
-                .catch(err => console.log(err))
+        async function getData() {
+            try {
+                setData(null)
+                setError(null)
+                const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${poke}`)
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        throw Error(res.statusText)
+                    } else {
+                        throw Error(res.statusText)
+                    }
+                }
+                console.log("THIS LINE DOESNT RUN AFTER ERROR")
+                const data = await res.json()
+                setData(data)
+                console.log(data)
+            } catch(err) {
+                console.log(err)
+                setError(err.message)
+            }
         }
-        // dependency causes useEffect trigger when name value changes
-    }, [name])
 
-    /* 
-        Return statements only allow expressions
-        Expressions only allow singular values to be expressed
-        That's why we wrap them in () and Fragments <> </>
-    */
+        if (poke !== "") getData()
+    }, [poke])
+
+    // TODO: if no data display loading; if error, display error msg; if data display data
+
+    const render = () => {
+        console.log("HERE", error, data)
+        if (error) return <h1>Err</h1>
+        if (!data) return <h1>Loading</h1>
+        if (data) return <DisplayPokemon data={data}/>
+    }
+
     return (
     <>
-    { data == ""
-        ? <Loading />
-        : <DisplayPokemon data={data} />
-    }</>
+    {render()}
+    </>
   )
 }
 

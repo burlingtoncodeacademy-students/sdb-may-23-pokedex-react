@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-function Input({ setName }) {
-
+function Input({ setPoke }) {
+    
     function handleClick(e) {
-        setName(e.target.previousSibling.value)
+      const value = e.target.previousSibling.value
+      setPoke(value)
+      e.target.previousSibling.value = ""
     }
 
   return (
