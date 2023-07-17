@@ -34,10 +34,6 @@ function Pokedex({ poke }) {
         if (poke !== "") getData()
     }, [poke])
 
-    // TODO: if no data display loading; if error, display error msg; if data display data
-    /* 
-    */
-
     const render = () => {
         if (error) return <h1>{error}</h1>
         if (!data) return <h1>Loading</h1>
